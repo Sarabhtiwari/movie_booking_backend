@@ -1,13 +1,20 @@
 const express = require('express')
-const app = express() //express object
 const env = require('dotenv')
 const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+
+
+const MovieRoutes = require('./routes/movie.route') 
+
+
 env.config()
+const app = express() //express object
 
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+MovieRoutes(app);  //invoking movie routes
 
 app.listen(process.env.PORT, async () => {
     // as we successfully start the server this callback gets executed
