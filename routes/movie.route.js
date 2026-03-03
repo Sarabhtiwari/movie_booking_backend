@@ -11,7 +11,9 @@ const routes = (app) => {
 
     app.put('/mba/api/v1/movies/:id',MovieController.updateMovie)
 
-    app.patch('/mba/api/v1/movies/:id',MovieController.updateMovie) //can hit same controller but now with partial update   
+    app.patch('/mba/api/v1/movies/:id',MovieController.updateMovie) //can hit same controller but now with partial update
+    
+    app.get('/mba/api/v1/movies',MovieController.getMovies)
 }
 
 module.exports = routes;
