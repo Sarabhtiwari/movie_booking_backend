@@ -4,7 +4,12 @@ const { successResponseBody , ErrorResponseBody, errorResponseBody } = require('
 const create = async (req,res) => {
     try {
         const response = await theatreService.createTheatre(req.body);
-
+        
+        if(response.err){
+            errorResponseBody.err = response.err;
+            errorResponseBody.message = "Validation failed on few parameters of request body";
+            return res.status(response.code).json(errorResponseBody)
+        }  //missing ko middleware se handle karo hai wo bhi validation error hi
         successResponseBody.data = response
         // console.log(response)
         successResponseBody.message = "Successfully created the theatre"
