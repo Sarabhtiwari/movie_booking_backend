@@ -1,5 +1,5 @@
 const theatreService = require('../services/theatre.service');
-const { successResponseBody , ErrorResponseBody, errorResponseBody } = require('../utils/responsebody')
+const { successResponseBody, errorResponseBody } = require('../utils/responsebody')
 
 const create = async (req,res) => {
     try {
