@@ -5,9 +5,13 @@ const { successResponseBody, errorResponseBody } = require('../utils/responsebod
 
 const createMovie = async (req,res) => {
     try {
-        const movie = await movieService.createMovie(req.body);
-
-        successResponseBody.data = movie;
+        const response = await movieService.createMovie(req.body);
+        if(response.err){
+            errorResponseBody.err = response.err
+            errorResponseBody.message = "Validation failed on few parameters of request body"
+            return res.status(response.code).json(errorResponseBody)
+        }
+        successResponseBody.data = response;
         // successResponseBody.message = "Successfully created the movie"
         //is line se resonse body me change ho rha tha to globally har succes me created movie ho dikha rha tha so commented ya to copy bana lo use bhejo
         return res.status(201).json(successResponseBody)
@@ -47,8 +51,28 @@ const getMovie = async (req,res) => {
         return res.status(500).json(errorResponseBody);
     }
 };
+
+const updateMovie = async (req,res) => {
+    try {
+        const response = await movieService.updateMovie(req.params.id,req.body)
+        if(response.err){
+            errorResponseBody.err = response.err;
+            errorResponseBody.message = "the updates that we are trying to apply doesn't validate the schema";
+            //beware ye global response bodies ko chaneg kar deta hai 
+            return res.status(response.code).json(errorResponseBody);
+        }
+        successResponseBody.data = response;
+        return res.status(200).json(successResponseBody);
+
+    } catch (error) {
+        console.log(error);
+        errorResponseBody.err = error;
+        return res.status(500).json(errorResponseBody);
+    }
+};
 module.exports = {
     createMovie,
     deleteMovie,
-    getMovie
+    getMovie,
+    updateMovie
 }
