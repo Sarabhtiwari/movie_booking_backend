@@ -58,9 +58,39 @@ const deleteTheatre = async(id) => {
         throw error;
     }
 }
+
+/**
+ * req.body -> we have the movie id and insert boolean  if insert is true we insert the movies to that theatre otherwise we remove that movies from that theatre we can make two endpoints also for this but for the time being this is it
+ */
+
+const updateMoviesInTheatres = async (theatreid,movieids,insert) => {
+    const theatre = await Theatre.findById(theatreid);
+    if(!theatre){
+        return {
+            err: "No such theatre found for the id provided",
+            code: 404
+        }
+    }
+    if(insert){
+        movieids.forEach(movieid => {
+            theatre.movies.push(movieid);
+        })
+    }else{
+        let savedMovieIds = theatre.movies;
+        movieids.forEach(movieId => {
+            savedMovieIds = savedMovieIds.filter(
+                smi => smi != movieId
+            )
+        })
+        theatre.movies = savedMovieIds;
+    }
+    await theatre.save(); //db call
+    return theatre.populate('movies');
+}
 module.exports = {
     createTheatre,
     getTheatre,
     fetchTheatres,
-    deleteTheatre
+    deleteTheatre,
+    updateMoviesInTheatres
 }

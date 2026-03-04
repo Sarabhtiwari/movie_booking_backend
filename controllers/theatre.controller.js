@@ -1,4 +1,3 @@
-const { get } = require('mongoose');
 const theatreService = require('../services/theatre.service');
 const { successResponseBody, errorResponseBody } = require('../utils/responsebody')
 
@@ -69,9 +68,28 @@ const destroy = async(req,res) => {
         return res.status(500).json(errorResponseBody);
     }
 }
+
+const updateMovies = async(req,res) => {
+    try {
+        const response = await theatreService.updateMoviesInTheatres(req.params.id,req.body.movieids,req.body.insert);
+
+        if(response.err){
+            errorResponseBody.err = err;
+            return res.status(response.code).json(errorResponseBody);
+        }
+        successResponseBody.data = response;
+        successResponseBody.message = "Successfully updated movies in theatre"
+        return res.status(200).json(successResponseBody);
+    } catch (error) {
+        console.log(error);
+        errorResponseBody.err = error;
+        return res.status(500).json(errorResponseBody);
+    }
+}
 module.exports = {
     create,
     getTheatres,
     getAllTheatres,
-    destroy
+    destroy,
+    updateMovies
 }
