@@ -110,10 +110,34 @@ const updateMoviesInTheatres = async (theatreid,movieids,insert) => {
     await theatre.save(); //db call
     return theatre.populate('movies');
 }
+
+const updateTheatre = async (id,data) => {
+    try {
+        const response = await Theatre.findByIdAndUpdate(id, data, { new: true ,runValidators: true})
+        // console.log({data,id})
+        if(!response){
+            return {
+                err: "No theatre found to update",
+                code: 404
+            }
+        }
+        return response;
+    } catch (error) {
+        if(error.name == "ValidationError"){
+            let err = {};
+            Object.keys(error.errors).forEach((key) => {
+                err[key] = error.errors[key].message;
+            })
+            return {err: err, code: 422}
+        }
+        throw error;
+    }
+}
 module.exports = {
     createTheatre,
     getTheatre,
     fetchTheatres,
     deleteTheatre,
-    updateMoviesInTheatres
+    updateMoviesInTheatres,
+    updateTheatre
 }
