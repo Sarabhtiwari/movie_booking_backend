@@ -36,6 +36,7 @@ const getTheatre = async (id) => {
 const fetchTheatres = async (data) => {
     try {
         let query = {};
+        let pagination = {};
         if(data && data.city){
             query.city = data.city;
         }
@@ -46,8 +47,18 @@ const fetchTheatres = async (data) => {
         if(data && data.name){
             query.name = data.name
         }
-        
-        const response = await Theatre.find({});;
+
+        if(data && data.limit){
+            pagination.limit = data.limit;
+        }
+        if(data && data.skip){
+            //we say frontend tells us on which page we are
+            //then how to ; skip skip is page no. ->0 indexed
+            let perPage = (data.limit) ? data.limit : 3;//if frontend tells us how many recods per page it shows otherwise we set 
+            pagination.skip = data.skip*perPage;
+        }
+        const response = await Theatre.find(query,{},pagination);
+
         return response;
     } catch (error) {
         console.log(error);
