@@ -1,3 +1,4 @@
+const { get } = require('mongoose');
 const theatreService = require('../services/theatre.service');
 const { successResponseBody, errorResponseBody } = require('../utils/responsebody')
 
@@ -21,6 +22,24 @@ const create = async (req,res) => {
     }
 }
 
+const getTheatres = async(req,res) => {
+    try {
+        const response = await theatreService.getTheatre(req.params.id);
+        if(response.err){
+            errorResponseBody.err = response.err;
+            return res.status(response.code).json(errorResponseBody);
+        }
+        successResponseBody.data=response;
+        successResponseBody.message = "Successfully fetched the theatres"
+        return res.status(200).json(successResponseBody);
+    } catch (error) {
+
+        console.log(error);
+        errorResponseBody.err = error;
+        return res.status(500).json(errorResponseBody);
+    }
+} 
 module.exports = {
-    create
+    create,
+    getTheatres
 }
