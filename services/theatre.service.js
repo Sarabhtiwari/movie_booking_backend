@@ -32,7 +32,18 @@ const getTheatre = async (id) => {
         throw error;
     }
 }
+
+const fetchTheatres = async () => {
+    try {
+        const response = await Theatre.find({});;
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
 module.exports = {
     createTheatre,
-    getTheatre
+    getTheatre,
+    fetchTheatres
 }
