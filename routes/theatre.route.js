@@ -10,5 +10,13 @@ const routes = (app) => {
     app.get('/mba/api/v1/theatres',theatreController.getAllTheatres);
 
     app.delete('/mba/api/v1/theatres/:id',theatreController.destroy)
+
+    app.patch('/mba/api/v1/theatres/:id/movies',theatreMiddleware.validateUpdateMovies,theatreController.updateMovies)
+
+    app.patch('/mba/api/v1/theatres/:id',theatreController.update)
+
+    app.put('/mba/api/v1/theatres/:id',theatreController.update)
+
+    app.get('/mba/api/v1/theatres/:id/movies',theatreController.getMovies)
 }
 module.exports = routes;

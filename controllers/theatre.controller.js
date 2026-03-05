@@ -1,4 +1,3 @@
-const { get } = require('mongoose');
 const theatreService = require('../services/theatre.service');
 const { successResponseBody, errorResponseBody } = require('../utils/responsebody')
 
@@ -42,7 +41,7 @@ const getTheatres = async(req,res) => {
 
 const getAllTheatres = async(req,res) => {
     try {
-        const response = await theatreService.fetchTheatres();
+        const response = await theatreService.fetchTheatres(req.query);
 
         successResponseBody.data = response;
         successResponseBody.message = "Successfully fetched all theatres";
@@ -69,9 +68,65 @@ const destroy = async(req,res) => {
         return res.status(500).json(errorResponseBody);
     }
 }
+
+const updateMovies = async(req,res) => {
+    try {
+        const response = await theatreService.updateMoviesInTheatres(req.params.id,req.body.movieids,req.body.insert);
+
+        if(response.err){
+            errorResponseBody.err = response.err;
+            return res.status(response.code).json(errorResponseBody);
+        }
+        successResponseBody.data = response;
+        successResponseBody.message = "Successfully updated movies in theatre"
+        return res.status(200).json(successResponseBody);
+    } catch (error) {
+        console.log(error);
+        errorResponseBody.err = error;
+        return res.status(500).json(errorResponseBody);
+    }
+}
+
+const update = async(req,res) => {
+    try {
+        const response = await theatreService.updateTheatre(req.params.id,req.body);
+        if(response.err){
+            errorResponseBody.err = response.err;
+            return res.status(response.code).json(errorResponseBody)
+        }
+        successResponseBody.data = response;
+        successResponseBody.message = "Successfully updated the theatre"
+        return res.status(200).json(successResponseBody);
+    } catch (error) {
+        console.log(error);
+        errorResponseBody.err = error;
+        return res.status(500).json(errorResponseBody)
+    }
+}
+
+const getMovies = async (req,res) => {
+    try {
+        const response = await theatreService.getMoviesInATheatre(req.params.id);
+        if(response.err){
+            errorResponseBody.err = response.err;
+            return res.status(response.code).json(errorResponseBody)
+        }
+        successResponseBody.data = response;
+        successResponseBody.message = "Successfully fetched all movies in a theatre";
+        return res.status(200).json(successResponseBody);
+    } catch (error) {
+        errorResponseBody.err = error
+        return res.status(500).json(errorResponseBody)
+    }
+}
+
 module.exports = {
     create,
     getTheatres,
     getAllTheatres,
-    destroy
+    destroy,
+    updateMovies,
+    update,
+    getMovies
+    
 }
