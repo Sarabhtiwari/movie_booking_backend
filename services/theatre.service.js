@@ -1,4 +1,5 @@
 const Theatre = require('../models/theatre.model')
+const Movie = require('../models/movie.model')
 
 const createTheatre = async (data) => {
     try {
@@ -56,6 +57,10 @@ const fetchTheatres = async (data) => {
             //then how to ; skip skip is page no. ->0 indexed
             let perPage = (data.limit) ? data.limit : 3;//if frontend tells us how many recods per page it shows otherwise we set 
             pagination.skip = data.skip*perPage;
+        }
+        //we want all theatres having a movie
+        if(data && data.movieId){
+            query.movies = {$all: data.movieId};
         }
         const response = await Theatre.find(query,{},pagination);
 
