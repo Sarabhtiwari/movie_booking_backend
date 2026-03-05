@@ -87,28 +87,35 @@ const deleteTheatre = async(id) => {
  */
 
 const updateMoviesInTheatres = async (theatreid,movieids,insert) => {
-    const theatre = await Theatre.findById(theatreid);
-    if(!theatre){
-        return {
-            err: "No such theatre found for the id provided",
-            code: 404
-        }
-    }
-    if(insert){
-        movieids.forEach(movieid => {
-            theatre.movies.push(movieid);
-        })
-    }else{
-        let savedMovieIds = theatre.movies;
-        movieids.forEach(movieId => {
-            savedMovieIds = savedMovieIds.filter(
-                smi => smi != movieId
+    try {
+
+        if(insert){
+            await Theatre.updateOne(
+                {_id: theatreid},
+                {$addToSet: {movies : {$each: movieids}}}
             )
-        })
-        theatre.movies = savedMovieIds;
+        }else{
+            await Theatre.updateOne(
+                {_id: theatreid},
+                {$pull: {movies: {$in: movieids}}}
+            );
+        }
+
+        const theatre = await Theatre.findById(theatreid);
+
+        if(!theatre){
+            return {
+                code: 404,
+                err: "No theatre found to update movies"
+            }
+        }
+
+        return theatre.populate('movies');
+
+    } catch (error) {
+        console.log(error);
+        throw error;
     }
-    await theatre.save(); //db call
-    return theatre.populate('movies');
 }
 
 const updateTheatre = async (id,data) => {

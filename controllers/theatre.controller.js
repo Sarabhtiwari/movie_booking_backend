@@ -74,7 +74,7 @@ const updateMovies = async(req,res) => {
         const response = await theatreService.updateMoviesInTheatres(req.params.id,req.body.movieids,req.body.insert);
 
         if(response.err){
-            errorResponseBody.err = err;
+            errorResponseBody.err = response.err;
             return res.status(response.code).json(errorResponseBody);
         }
         successResponseBody.data = response;
