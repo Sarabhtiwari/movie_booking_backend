@@ -25,7 +25,7 @@ const getTheatre = async (id) => {
         if(!response){
             return {
                 err: "No theatre found for the given id",
-                code: 404
+                code: STATUS.NOT_FOUND
             }
         }
         return response;
@@ -76,9 +76,9 @@ const deleteTheatre = async(id) => {
     try {
         const response = await Theatre.findByIdAndDelete(id);
         if(!response){
-            return {
+            throw {
                 err: "No record(theatre) found for the given id",
-                code: 404
+                code: STATUS.NOT_FOUND
             }
         }
         return response;
@@ -111,7 +111,7 @@ const updateMoviesInTheatres = async (theatreid,movieids,insert) => {
 
         if(!theatre){
             return {
-                code: 404,
+                code: STATUS.NOT_FOUND,
                 err: "No theatre found to update movies"
             }
         }
@@ -131,7 +131,7 @@ const updateTheatre = async (id,data) => {
         if(!response){
             return {
                 err: "No theatre found to update",
-                code: 404
+                code: STATUS.NOT_FOUND
             }
         }
         return response;
@@ -153,7 +153,7 @@ const getMoviesInATheatre = async(id) => {
         //means name of theatre and movies not full theatre data
         if(!response){
             return {
-                code: 404,
+                code: STATUS.NOT_FOUND,
                 err: "No theatre found for the given id"
             }
         }
@@ -169,7 +169,7 @@ const checkMovieInATheatre = async(theatreId,movieId) => {
         const response = await Theatre.findById(theatreId);
         if(!response){
             return {
-                code: 404,
+                code: STATUS.NOT_FOUND,
                 err: "No such theatre found"
             }
         }

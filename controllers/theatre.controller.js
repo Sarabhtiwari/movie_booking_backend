@@ -55,14 +55,14 @@ const getAllTheatres = async(req,res) => {
 const destroy = async(req,res) => {
     try {
         const response = await theatreService.deleteTheatre(req.params.id);
-        if(response.err){
-            errorResponseBody.err = response.err;
-            return res.status(response.code).json(errorResponseBody);
-        }
         successResponseBody.data = response;
         successResponseBody.message = "successfully deleted theatre";
         return res.status(STATUS.OK).json(successResponseBody);
     } catch (error) {
+        if(error.err){
+            errorResponseBody.err = error.err;
+            return res.status(error.code).json(errorResponseBody)
+        }
         console.log(error);
         return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
     }

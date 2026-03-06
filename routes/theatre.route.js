@@ -13,7 +13,9 @@ const routes = (app) => {
 
     app.get('/mba/api/v1/theatres',theatreController.getAllTheatres);
 
-    app.delete('/mba/api/v1/theatres/:id',authMiddleware.isAuthenticated,theatreController.destroy)
+    app.delete('/mba/api/v1/theatres/:id',authMiddleware.isAuthenticated,
+    authMiddleware.isAdminOrClient,
+    theatreController.destroy)
 
     app.patch('/mba/api/v1/theatres/:id/movies',theatreMiddleware.validateUpdateMovies,theatreController.updateMovies)
 
