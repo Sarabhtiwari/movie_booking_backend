@@ -1,7 +1,7 @@
 const Movie = require('../models/movie.model')
 const movieService = require('../services/movie.service')
 const { successResponseBody, errorResponseBody } = require('../utils/responsebody')
-
+const { STATUS } = require('../utils/constants')
 
 const createMovie = async (req,res) => {
     try {
@@ -12,12 +12,16 @@ const createMovie = async (req,res) => {
             return res.status(response.code).json(errorResponseBody)
         }
         successResponseBody.data = response;
-        // successResponseBody.message = "Successfully created the movie"
+        successResponseBody.message = "Successfully created the movie"
         //is line se resonse body me change ho rha tha to globally har succes me created movie ho dikha rha tha so commented ya to copy bana lo use bhejo
         return res.status(201).json(successResponseBody)
     } catch (error) {
         console.log(error)
-        return res.status(500).json(errorResponseBody);
+        if(error.err){
+            errorResponseBody.err = error.err
+            return res.status(error.code).json(errorResponseBody)
+        }
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
     }
 };
 
@@ -33,7 +37,7 @@ const deleteMovie = async(req,res) => {
     } catch (error) {
         console.log(error);
         errorResponseBody.err = error;
-        return res.status(500).json(errorResponseBody);
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
     }
 };
 
@@ -49,7 +53,7 @@ const getMovie = async (req,res) => {
         return res.status(200).json(successResponseBody);
     } catch (error) {
         console.log(error);
-        return res.status(500).json(errorResponseBody);
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
     }
 };
 
@@ -68,7 +72,7 @@ const updateMovie = async (req,res) => {
     } catch (error) {
         console.log(error);
         errorResponseBody.err = error;
-        return res.status(500).json(errorResponseBody);
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
     }
 };
 
@@ -84,7 +88,7 @@ const getMovies = async (req,res) => {
     } catch (error) {
         console.log(error);
         errorResponseBody.err = error;
-        return res.status(500).json(errorResponseBody)
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody)
     }
 };
 module.exports = {
