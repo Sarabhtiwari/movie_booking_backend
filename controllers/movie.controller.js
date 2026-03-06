@@ -54,12 +54,6 @@ const getMovie = async (req,res) => {
 const updateMovie = async (req,res) => {
     try {
         const response = await movieService.updateMovie(req.params.id,req.body)
-        if(response.err){
-            errorResponseBody.err = response.err;
-            errorResponseBody.message = "the updates that we are trying to apply doesn't validate the schema";
-            //beware ye global response bodies ko chaneg kar deta hai 
-            return res.status(response.code).json(errorResponseBody);
-        }
         successResponseBody.data = response;
         return res.status(STATUS.OK).json(successResponseBody);
 

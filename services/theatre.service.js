@@ -141,7 +141,7 @@ const updateTheatre = async (id,data) => {
             Object.keys(error.errors).forEach((key) => {
                 err[key] = error.errors[key].message;
             })
-            return {err: err, code: STATUS.UNPROCESSABLE_ENTITY}
+            throw {err: err, code: STATUS.UNPROCESSABLE_ENTITY}
         }
         throw error;
     }
