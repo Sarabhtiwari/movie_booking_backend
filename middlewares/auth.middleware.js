@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 
 const { errorResponseBody } = require("../utils/responsebody")
 const userService = require('../services/user.service')
+const { USER_ROLE } = require('../utils/constants')
 
 //for signup 
 const validateAuthRequest = async (req,res,next) => {
@@ -79,9 +80,44 @@ const validateResetPasswordRequest = async (req,res,next) => {
     next();
 }
 
+const isAdmin = async(req,res,next) => {
+    const user = await userService.getUserById(req.user); //middleware se hai hamare pass user ki info ab tum authorise kar rhe usme har baar user thodi apni id bhejega use kya mtlab so isliye req.user me store karte
+    if(user.userRole != USER_ROLE.admin){
+        errorResponseBody.err = "User is not admin,cannot proceed with the request";
+        return res.status(401).json(errorResponseBody)
+    }
+    next();
+}
+
+
+const isClient = async(req,res,next) => {
+    const user = await userService.getUserById(req.user); //middleware se hai hamare pass user ki info ab tum authorise kar rhe usme har baar user thodi apni id bhejega use kya mtlab so isliye req.user me store karte
+    if(user.userRole != USER_ROLE.client){
+        errorResponseBody.err = "User is not client,cannot proceed with the request";
+        return res.status(401).json(errorResponseBody)
+    }
+    next();
+}
+
+const isAdminOrClient = async(req,res,next) => {
+    const user = await userService.getUserById(req.user); //middleware se hai hamare pass user ki info ab tum authorise kar rhe usme har baar user thodi apni id bhejega use kya mtlab so isliye req.user me store karte
+    if(user.userRole != USER_ROLE.admin && user.userRole != USER_ROLE.client){
+        errorResponseBody.err = "User is neither admin nor client ,cannot proceed with the request";
+        return res.status(401).json(errorResponseBody)
+    }
+    next();
+}
+//ye teeno se ye kar skte ki jaise tumhe kisi aur user ka role change karna hai to wo koi admin kar skta aur admin kisi bhi user ka change kar skta 
+//so try logging in with any admin and token take and params.id me userid uski daalo jiski update karni ho dekhna
+
+
+
 module.exports = {
     validateAuthRequest,
     validateSignInRequest,
     isAuthenticated,
-    validateResetPasswordRequest
+    validateResetPasswordRequest,
+    isAdmin,
+    isClient,
+    isAdminOrClient
 }
