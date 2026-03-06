@@ -7,6 +7,8 @@ const routes = (app) => {
     authMiddleware.validateAuthRequest,authController.signup);
 
     app.post('/mba/api/v1/auth/signin',authMiddleware.validateSignInRequest,authController.signin);
+
+    app.patch('/mba/api/v1/auth/reset',authMiddleware.isAuthenticated,authController.resetPassword);
 }
 
 module.exports = routes;

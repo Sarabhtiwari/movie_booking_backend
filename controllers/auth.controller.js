@@ -53,8 +53,38 @@ const signin = async(req,res) => {
         return res.status(500).json(errorResponseBody)
     }
 }
+//to logout we have two ways in jwt 
+//1. either the token expires
+//2. delete stored token in frontend since server is stateless no mtlab
+// Reset password and forget password are different things so here only implementing reset password 
 
+const resetPassword = async (req,res) => {
+    try {
+        const user = await userService.getUserById(req.user);
+
+        const isOldPasswordCorrect = await user.isValidPassword(req.body.oldPassword);
+
+        if(!isOldPasswordCorrect){
+            throw {err: "Invalid old password,please write correct old password",cose: 403}
+        }
+        user.password = req.body.newPassword
+        await user.save();
+
+        successResponseBody.data = user;
+        successResponseBody.message = "Successfully updated the password for the given user"
+
+        return res.status(200).json(successResponseBody);
+    } catch (error) {
+        if(error.err){
+            errorResponseBody.err = error.err
+            return res.status(error.code).json(errorResponseBody)
+        }
+        errorResponseBody.err = error
+        return res.status(500).json(errorResponseBody)
+    }
+}
 module.exports = {
     signup,
-    signin
+    signin,
+    resetPassword
 }
