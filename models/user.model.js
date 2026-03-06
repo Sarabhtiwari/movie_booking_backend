@@ -49,9 +49,11 @@ userSchema.pre('save', async function(){
  * @param plainPassword 
  * @returns boolean -> passwords same or not
  */
-userSchema.methods.isValidPassword = async(plainPassword) => {
+
+//arrow function doesn't have this
+userSchema.methods.isValidPassword = async function (plainPassword) {
     const currentUser = this;
-    const compare = await bcrypt.compare(plainPassword,currentUser.password)
+    const compare = await bcrypt.compare(plainPassword, currentUser.password);
     return compare;
 }
 
