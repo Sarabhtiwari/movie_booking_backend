@@ -1,5 +1,6 @@
 const theatreController = require('../controllers/theatre.controller')
 const theatreMiddleware = require('../middlewares/theatre.middleware')
+const authMiddleware = require('../middlewares/auth.middleware')
 
 const routes = (app) => {
 
@@ -9,7 +10,7 @@ const routes = (app) => {
 
     app.get('/mba/api/v1/theatres',theatreController.getAllTheatres);
 
-    app.delete('/mba/api/v1/theatres/:id',theatreController.destroy)
+    app.delete('/mba/api/v1/theatres/:id',authMiddleware.isAuthenticated,theatreController.destroy)
 
     app.patch('/mba/api/v1/theatres/:id/movies',theatreMiddleware.validateUpdateMovies,theatreController.updateMovies)
 
