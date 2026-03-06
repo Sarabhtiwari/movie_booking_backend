@@ -23,12 +23,6 @@ const routes = (app) => {
   );
 
   app.patch(
-    "/mba/api/v1/theatres/:id/movies",
-    theatreMiddleware.validateUpdateMovies,
-    theatreController.updateMovies,
-  );
-
-  app.patch(
     "/mba/api/v1/theatres/:id",
     authMiddleware.isAuthenticated,
     authMiddleware.isAdminOrClient,
@@ -42,6 +36,12 @@ const routes = (app) => {
     theatreController.update,
   );
 
+  app.patch(
+    "/mba/api/v1/theatres/:id/movies",
+    theatreMiddleware.validateUpdateMovies,
+    theatreController.updateMovies,
+  );
+  
   app.get("/mba/api/v1/theatres/:id/movies", theatreController.getMovies);
 
   app.get(

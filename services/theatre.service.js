@@ -110,7 +110,7 @@ const updateMoviesInTheatres = async (theatreid,movieids,insert) => {
         const theatre = await Theatre.findById(theatreid);
 
         if(!theatre){
-            return {
+            throw {
                 code: STATUS.NOT_FOUND,
                 err: "No theatre found to update movies"
             }
@@ -152,7 +152,7 @@ const getMoviesInATheatre = async(id) => {
         const response = await Theatre.findById(id,{name: 1,movies: 1}).populate('movies');
         //means name of theatre and movies not full theatre data
         if(!response){
-            return {
+            throw {
                 code: STATUS.NOT_FOUND,
                 err: "No theatre found for the given id"
             }
@@ -168,7 +168,7 @@ const checkMovieInATheatre = async(theatreId,movieId) => {
     try {
         const response = await Theatre.findById(theatreId);
         if(!response){
-            return {
+            throw {
                 code: STATUS.NOT_FOUND,
                 err: "No such theatre found"
             }
@@ -179,6 +179,7 @@ const checkMovieInATheatre = async(theatreId,movieId) => {
         throw error;
     }
 }
+
 module.exports = {
     createTheatre,
     getTheatre,
