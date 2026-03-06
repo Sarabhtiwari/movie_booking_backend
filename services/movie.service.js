@@ -1,4 +1,5 @@
 const Movie = require('../models/movie.model');
+const { STATUS } = require('../utils/constants');
 const { errorResponseBody } = require('../utils/responsebody');
 
 //create movie pe validation error ya specific error show kar rhe 
@@ -13,7 +14,7 @@ const createMovie = async (data) => {
                 err[key] = error.errors[key].message;
             });
             console.log(err);
-            return {err: err,code: 422};
+            throw {err: err,code: 422};
         }else{
             throw error;
         }
@@ -36,9 +37,9 @@ const deleteMovie = async (id) => {
     try {
         const response = await Movie.findByIdAndDelete(id);
         if(!response){
-            return {
+            throw {
                 err: "No movie found for the corresponding id provided to delete",
-                code: 404
+                code: STATUS.NOT_FOUND
             }
         }
         return response;
