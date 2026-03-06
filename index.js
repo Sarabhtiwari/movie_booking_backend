@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 
 const MovieRoutes = require('./routes/movie.route') 
 const theatreRoutes = require('./routes/theatre.route')
+const authRoutes = require('./routes/auth.route')
 
 env.config()
 const app = express() //express object
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 
 MovieRoutes(app);  //invoking movie routes
 theatreRoutes(app); //invoking theatre routes
+authRoutes(app); //invoking auth routes
 
 app.listen(process.env.PORT, async () => {
     // as we successfully start the server this callback gets executed
