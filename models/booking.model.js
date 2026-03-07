@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { STATUS } = require('../utils/constants')
+const { BOOKING_STATUS } = require('../utils/constants')
 
 const bookingSchema = new mongoose.Schema({
     theatreId: {
@@ -32,13 +32,13 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: {
-            values: [STATUS.processing,STATUS.cancelled,STATUS.successfull],
+            values: [BOOKING_STATUS.processing,BOOKING_STATUS.cancelled,BOOKING_STATUS.successfull],
             message: "Invalid booking status"
         },
-        default: STATUS.processing
+        default: BOOKING_STATUS.processing
     }
 },{timestamps: true});
 
-const Booking = new mongoose.model('Booking',bookingSchema)
+const Booking = mongoose.model('Booking',bookingSchema)
 
 module.exports = Booking
