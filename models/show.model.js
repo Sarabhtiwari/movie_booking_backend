@@ -3,10 +3,10 @@ const mongoose = require('mongoose')
 const showSchema = new mongoose.Schema({
     theatreId: {
         type: mongoose.Schema.Types.ObjectId,
-        requires: true
+        required: true
     },
     movieId: {
-        types: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     timing: {
@@ -28,4 +28,4 @@ const showSchema = new mongoose.Schema({
 
 const Show = mongoose.model('Show',showSchema);
 
-modue.exports = Show;
+module.exports = Show;
